@@ -47,7 +47,6 @@ function renderGlossaryEntryList() {
   glossary_entryList.innerHTML = '';
   filteredGlossaryClassNames.forEach(className => {
     const li = document.createElement('li');
-    //li.innerHTML = highlightFoundGlossaryText(className, lastGlossarySearch);
     li.innerHTML = className;
     li.onclick = () => showGlossaryClass(className);
     li.id = 'entry-' + className;
@@ -72,17 +71,28 @@ function showGlossaryClass(className) {
 
 function renderGlossaryClass(className){
   const cls = glossary_data[className];
-  // let html = `<div class="class-title" id="class-${className}">${highlightFoundGlossaryText(className, lastGlossarySearch)}</div>`;
   let html = `<div class="class-title" id="class-${className}">${className}</div>`;
   html += `<div class="class-desc">${highlightFoundGlossaryText(cls.description || '', lastGlossarySearch)}</div>`;
+
   if (cls.inherit) {
-    // If the inherited class exists, make it a link
-    if (glossary_data[cls.inherit]) {
-      html += `<div class="class-inherit">Inherits: <a href="#class-${cls.inherit}" onclick="scrollToClass('${cls.inherit}');return false;">${highlightFoundGlossaryText(cls.inherit, lastGlossarySearch)}</a></div>`;
+  const inheritList = cls.inherit
+    .split(",")
+    .map(s => s.trim())
+    .filter(s => s.length > 0);
+
+  const inheritHtml = inheritList.map(name => {
+    if (glossary_data[name]) {
+      // If the inherited class exists, make it a link
+      return `<a href="#class-${name}" onclick="scrollToClass('${name}');return false;">${highlightFoundGlossaryText(name, lastGlossarySearch)}</a>`;
     } else {
-      html += `<div class="class-inherit">Inherits: ${highlightFoundGlossaryText(cls.inherit, lastGlossarySearch)}</div>`;
+      // Just show the text if it doesn't exist in glossary_data
+      return highlightFoundGlossaryText(name, lastGlossarySearch);
     }
-  }
+  }).join(", ");
+
+  html += `<div class="class-inherit">Inherits: ${inheritHtml}</div>`;
+}
+
   if (cls.url) html += `<div class="class-url"><a href="${cls.url}" target="_blank">Specification &rarr;</a></div>`;
   if (cls.attributes && Object.keys(cls.attributes).length) {
     html += `<table class="attributes-table"><tr><th>Attribute</th><th>Description</th><th>Existence</th><th>Type</th></tr>`;
@@ -132,7 +142,6 @@ function updateSearch() {
   if (lastSelectedGlossaryClass && lastSelectedGlossaryClass!=''){
   showGlossaryClass(lastSelectedGlossaryClass);
   }
-  //glossary_mainPanel.innerHTML = `<div style="color:#888;">Select a class from the left to view details.</div>`;
 }
 
 glossary_searchInput.addEventListener('input', updateSearch);

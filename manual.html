@@ -218,9 +218,9 @@
 			<h1 id="title">Archetype Companion Manual</h1>
 			<p><em><strong>Author:</strong> Martin A. Koch, PhD</em>
 				<br>
-				<em><strong>Copyright:</strong> 2025, CatSalut. Servei Català de la Salut</em>
+				<em><strong>Copyright:</strong> 2026, CatSalut. Servei Català de la Salut</em>
 				<br>
-				<em><strong>Version:</strong> 0.8.1 (Last updated: 2026-01-12)</em>
+				<em><strong>Version:</strong> 0.9.2 (Last updated: 2026-02-06)</em>
 			</p>
 
 			<p style="text-align: center; line-height: 250%;">
@@ -1285,34 +1285,33 @@
 				to indicate the need for a new archetype in the repository.</p>
 
 			<h4>Include Archetype</h4>
-			<p>If you plan to have a Cluster in the "new" archetype that is defined to include another existing
-				archetype, you can add a list of inclusion statements. To do so, select the archetype you wish to
-				include from the dropdown list. The selectable archetypes are provided in the selection list.</p>
+			<p>If you plan to have a Cluster in the "new" archetype that is defined to include, you can add a list of inclusion statements. To do so, click on the "Add/delete included archetypes" button above the included archetypes list.</p>
 			<div style="text-align: center;">
 				<img src="images/tut_col_include.png" width="350">
 				<br>
 				<small>
-					Select an archetype to include from the dropdown list.
+					Select an the button to include (or delete) an archetype from the dropdown list.
 				</small>
 			</div>
-			<p>After selecting the archetype from the dropdown list, press the "Add" button. This will add the archetype
-				to the list.</p>
+
+			<p>In the opened list you can see all archetypes in your current archetype collection.
+				Archetypes that are already in the inclusion list are marked in red, archetypes that are available for inclusion in green.
+
+				To <strong>delete an archetype</strong> from the inclusion list, just click on its name in red. 
+				
+				To <strong>add an archetype</strong> to the inclusion list, click on its name in green.
+				
+				</p>
 			<div style="text-align: center;">
 				<img src="images/tut_col_add_inclusion.png" width="400">
 				<br>
 				<small>
-					Add the inclusion to the "new" archetype.
+					Add or delete the inclusion to/from the "new" archetype by clicking on its name.
 				</small>
 			</div>
-			<p>If you wish to delete an inclusion statement, select the archetype you want to remove from the dropdown
-				menu and press the "Remove" button.</p>
-			<div style="text-align: center;">
-				<img src="images/tut_col_delete_inclusion.png" width="400">
-				<br>
-				<small>
-					Delete the inclusion from the list of the "new" archetype.
-				</small>
-			</div>
+			
+
+
 			<h3>Delete a "New" Archetype</h3>
 			<p>If you no longer wish to keep the "new" archetype in your collection, you can delete it from the list.
 				Click on the archetype in the new archetype list to select it. An icon will appear on the right of the
@@ -1548,6 +1547,39 @@
 					Select an archetype from your collection as a node of the tree.
 				</small>
 			</div>
+
+			<h3>Add archetype elements automatically</h3>
+			<p>
+				On top of the Template Planner editor you find a checkbox "Prompt archetype autofill". 
+			</p>
+			<div style="text-align: center;">
+				<img src="images/tut_tree_autofill_option.png" width="600">
+				<br>
+				<small>
+					Enable or diable the autofill option.
+				</small>
+			</div>
+			<p>
+				When selecting an archetype and the autofill lfeature is enabled, a message pops up that asks for confirmation of the autofill.
+			</p>
+			<div style="text-align: center;">
+				<img src="images/tut_tree_autofill_confirmation.png" width="350">
+				<br>
+				<small>
+					Confirm autofill on archetype selection.
+				</small>
+			</div>
+			<p>
+				If the message is confirmed, all elements of the archetype are added to the current branch. 
+			</p>
+						<div style="text-align: center;">
+				<img src="images/tut_tree_autofill_elements.png" width="1200">
+				<br>
+				<small>
+					Elements are added automatically to the archetype branch.
+				</small>
+			</div>
+
 
 			<h3>Adding a Branch</h3>
 			<p>
@@ -1987,10 +2019,23 @@
 				<strong>Focus on Archetype:</strong> To focus on a specific archetype in the network, click on its node
 				with the left mouse button.
 			</p>
+
+
+			<p>
+				<strong>Go back one archetype at the time:</strong> When more than one archetype has been shown in the past, a button apppears in the upper left corner. By clicking this button, you can focus en the last visited archetype.
+			</p>
+			<div style="text-align: center;">
+				<img src="images/tut_vis_one_step_back.png" width="600">
+				<br>
+				<small>
+					One step back button.
+				</small>
+			</div>
+
 			<h3>The Different Views</h3>
 
 			<p>The network visualisation has various views that can be selected with the dropdown menu on the upper
-				right side of the window. You can select between <em>Archetype</em>, <em>Similar</em>, <em>Archetype +
+				right side of the window. You can select between <em>Archetype</em>, <em>Archetype Structure</em>, <em>Similar</em>, <em>Archetype +
 					Similar</em>, <em>Collection</em>, <em>Project</em>, and <em>Template Planner</em> view.</p>
 
 			<div style="text-align: center;">
@@ -2019,6 +2064,26 @@
 					The archetype view.
 				</small>
 			</div>
+
+			
+			<p>
+				<strong>Archetype Structure:</strong>
+			</p>
+			<ul>
+				<li>In the "Archetype Structure" view, you can see the relationships of the elements included in an archetype.</li>
+				<li>The currently selected archetype is shown as a red node.</li>
+				<li>Nodes with an at-code and a label are grey with a black outline, nodes without at-code are grey.</li>
+				<li>Endpoints that stand for values are pink.</li>
+			</ul>
+			<div style="text-align: center;">
+				<img src="images/tut_vis_archetype_structure_view.png" width="800">
+				<br>
+				<small>
+					The archetype structure view.
+				</small>
+			</div>
+
+
 			<p>
 				<strong>Similar:</strong>
 			</p>
