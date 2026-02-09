@@ -35,7 +35,10 @@ def download_RM(outputdir):
 	'https://specifications.openehr.org/releases/RM/latest/ehr_extract.html',
 	'https://specifications.openehr.org/releases/RM/latest/ehr.html',
 	'https://specifications.openehr.org/releases/RM/latest/integration.html',
-	'https://specifications.openehr.org/releases/RM/latest/support.html'
+	'https://specifications.openehr.org/releases/RM/latest/support.html',
+	'https://specifications.openehr.org/releases/BASE/latest/foundation_types.html',
+	'https://specifications.openehr.org/releases/BASE/latest/resource.html'
+
 	]
 
 	#for h in html_list:
@@ -64,6 +67,7 @@ def download_RM(outputdir):
 					RM_class = header_cells[1].text
 					raw_title = RM_class
 					RM_class = RM_class.replace('(abstract)','')
+					RM_class = RM_class.replace('<T>','')
 					RM_class = RM_class.strip()
 					RM['RM'][RM_class]={}
 					RM['RM'][RM_class]['type'] = header_cells[0].text
