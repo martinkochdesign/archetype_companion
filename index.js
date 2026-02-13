@@ -1,5 +1,5 @@
 //INITIATE CONSTANTS and GLOBAL VARIABLES *****************************************************************************************
-const version = '0.72.3-beta';
+const version = '0.74.1-beta';
 
 let newNodes = []
 
@@ -13,6 +13,7 @@ let checkList = [];
 let wholeProject = {};
 
 let show_collection_items = true;
+let show_checked_items = true;
 
 let filterSet = {};
 resetfilterSet();
@@ -399,6 +400,23 @@ function toggleViewCollectionItems() {
   }
   updateLists();
 }
+
+function toggleViewCheckedItems() {
+  const show_checked_items_button = document.getElementById('show_checked_items_button');
+  const hide_checked_items_button = document.getElementById('hide_checked_items_button');
+  if (show_checked_items) {
+    show_checked_items = false;
+    show_checked_items_button.style.display = 'inline';
+    hide_checked_items_button.style.display = 'none';
+  }
+  else {
+    show_checked_items = true;
+    show_checked_items_button.style.display = 'none';
+    hide_checked_items_button.style.display = 'inline';
+  }
+  renderViewer();
+}
+
 
 //WORKFLOW AT FIRST EXECUTION *********************************************************************************
 
@@ -1087,15 +1105,50 @@ function link_expand_structure_button() {
 function formatNodeItemAsHTML(item) {
   // Helper to format arrays of objects
   function formatItemArray(arr) {
-    if (!arr || arr.length === 0)
-      return '<em>None</em>';
-    return '<ul>' + arr.map(obj =>
-      `<li class="notselectable">
-      ${obj.occurrence ? '<span style="border-radius:5px; background: darkgray; color: white; font-size:12px; font-weight:bold; padding-left:3px; padding-right:3px;">' + obj.occurrence + '</span>' : ''}
-      ${obj.code} <strong>${obj.label}</strong> <small>${obj.type}</small>
-      ${obj.description ? '<br><span style="font-size:10pt; color: darkblue; font-weight: 500;">' + obj.description + '</span>' : ''}
-    </li>`).join('') + '</ul>';
-  }
+  if (!arr || arr.length === 0)
+    return '<em>None</em>';
+
+  const itemsHTML = '<ul>' + arr.map(obj => {
+
+    // 1) Clean the full type string first (remove at-codes, brackets, quotes)
+    const cleanTypeString = (obj.type || '')
+      .replaceAll(/(\[at[0-9]+\])/gm, '')  // remove [atNNNN]
+      .replaceAll('[', '')
+      .replaceAll(']', '')
+      .replaceAll("'", '')
+      .trim();
+
+    // 2) Split into individual types (assuming comma-separated: "DV_TEXT, DV_QUANTITY")
+    const types = cleanTypeString
+      .split(',')
+      .map(t => t.trim())
+      .filter(t => t.length > 0);
+
+    // 3) Create clickable spans for each type
+    const typeSpans = types.map(t =>
+      `<span style="cursor:pointer;"
+              onclick="openGlossaryAtPage('${t}')">${t}</span>`
+    ).join(', ');  // join with comma/space, or ' ' if you prefer
+
+    return `
+      <li class="notselectable">
+        ${obj.occurrence
+          ? `<span style="border-radius:5px; background: darkgray; color: white; font-size:12px; font-weight:bold; padding-left:3px; padding-right:3px;">${obj.occurrence}</span>`
+          : ''
+        }
+        ${obj.code} <strong>${obj.label}</strong>
+        
+        <small>${typeSpans}</small>
+
+        ${obj.description
+          ? `<br><span style="font-size:10pt; color: darkblue; font-weight: 500;">${obj.description}</span>`
+          : ''
+        }
+      </li>`;
+  }).join('') + '</ul>';
+
+  return itemsHTML;
+}
 
   function formatInclusionArray(arr) {
     if (!arr || arr.length === 0)
@@ -1843,6 +1896,9 @@ function renderViewer() {
     secDiv.classList.add("checklist_section");
     secDiv.innerHTML = `<div class="checklist_section_label">${section.name}</div>`;
     section.elements.forEach((el) => {
+    
+    if (!(el.approved && !show_checked_items)){ //if the item has been "approved" and we want to "hide" the checked item, do not add this line
+
       const line = document.createElement('div');
 
       if (el.archetype === "Select archetype from collection") {
@@ -1872,6 +1928,9 @@ function renderViewer() {
           `
         ;
       secDiv.appendChild(line);
+    };
+
+
     });
     container.appendChild(secDiv);
   });
@@ -4406,6 +4465,16 @@ function set_window_configuration_6() {
 };
 
 
+
+function openGlossaryAtPage(term){
+  //if the term exists, open the glossary and go to the page
+  if (glossaryClassNames.includes(term)){
+    show_glossary_page();
+    showGlossaryClass(term);
+  }
+}
+
+
 //template tree standard view with checklist editor open
 function enter_extended_search() {
   if (document.getElementById("wdw_checklist_editor").style.display == 'none') {
@@ -5209,7 +5278,7 @@ function renderTree(node, parent) {
       <img src="images/remove.png" alt="Delete element" height="14" style="cursor: pointer;" title="Delete element">
       </button>
      
-      <span class="archetype-class"><small>${node.type ? node.type.toUpperCase() : ''}</small></span>
+      <span class="archetype-class" style="cursor:pointer;" onclick="openGlossaryAtPage('${node.type ? node.type.toUpperCase() : ''}')"><small>${node.type ? node.type.toUpperCase() : ''}</small></span>
       <span class="compatibility-warning">${class_compatibility_check(node, parent)}</span>
       
       <button class="icon-btn" title="toggle comment" onclick="showNodeComment('node_comment_${node.node_uid}', '${node.node_uid}')"}>
