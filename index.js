@@ -1,5 +1,5 @@
 //INITIATE CONSTANTS and GLOBAL VARIABLES *****************************************************************************************
-const version = '0.74.1-beta';
+const version = '0.75.0-beta';
 
 let newNodes = []
 
@@ -822,7 +822,12 @@ function updateLists() {
     if (lastIds.length > 1 && (document.getElementById('select_vis_view').value == 'ARCHETYPE' || document.getElementById('select_vis_view').value == 'ARCHETYPEMINDMAP' || document.getElementById('select_vis_view').value == 'SIMILAR' || document.getElementById('select_vis_view').value == 'COMBINATION')) {
       document.getElementById('visualization_back_btn').style.display = 'inline';
       document.getElementById('lastArchetypeLabel').style.display = 'inline';
-      document.getElementById('lastArchetypeLabel').innerText = lastIds[lastIds.length - 2];
+
+      const beforeArchetype = lastIds[lastIds.length - 2];
+      const beforItem = archetypeListItems.find(item => item.id === beforeArchetype);
+      
+
+      document.getElementById('lastArchetypeLabel').innerText = beforItem.textContent;
     } else {
       document.getElementById('visualization_back_btn').style.display = 'none';
       document.getElementById('lastArchetypeLabel').style.display = 'none';
@@ -1195,6 +1200,8 @@ function formatNodeItemAsHTML(item) {
       <p><strong>Description:</strong> ${formatString(item.concept_description)}</p>
       <p><strong>State:</strong> ${formatString(item.lifecycle_state)}</p>
       <p><strong>Revision:</strong> ${formatString(item.revision)}</p>
+      <p><strong>Original language:</strong> ${formatString(item.original_language)}</p>
+      <p><strong>Available translations:</strong> ${formatString(item.translation_languages.sort().join(', '))}</p>
       <p><strong>Date:</strong> ${formatString(item.date)}</p>
       <p><strong>Keywords:</strong> ${formatString(item.keywords.join(', '))}</p>
       <p><strong>Parent:</strong> ${formatString(item.parent)}</p>
