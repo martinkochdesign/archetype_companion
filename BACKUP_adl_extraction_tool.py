@@ -13,9 +13,9 @@ import time
 
 # VARIABLES ******************************************************************
 # general things
-version = 'v4.20'
+version = 'v4.28'
 author = 'Martin A. Koch, PhD'
-copyright = '(c) 2025, CatSalut. Servei Català de la Salut'
+copyright = '(c) 2026, CatSalut. Servei Català de la Salut'
 license = 'License: Apache 2.0'
 # Set headless to True if you do not need the GUI (or False if you want to use the GUI
 headless = True
@@ -39,6 +39,261 @@ highmed_url_CKM = 'https://ckm.highmed.org/ckm/retrieveResources?resourceType=ar
 international_url_CKM = 'https://ckm.openehr.org/ckm/retrieveResources?resourceType=archetype&format=ADL&state1=INITIAL&state2=DRAFT&state3=TEAMREVIEW&state4=REVIEWSUSPENDED&state5=PUBLISHED&state6=REASSESS_DRAFT&state7=REASSESS_TEAMREVIEW&state8=REASSESS_REVIEWSUSPENDED'
 catsalut_url_CKM = 'https://ckm.salut.gencat.cat/ckm/retrieveResources?resourceType=archetype&format=ADL&state1=INITIAL&state2=DRAFT&state3=TEAMREVIEW&state4=REVIEWSUSPENDED&state5=PUBLISHED&state6=REASSESS_DRAFT&state7=REASSESS_TEAMREVIEW&state8=REASSESS_REVIEWSUSPENDED'
 arketyper_url_CKM = 'https://arketyper.no/ckm/retrieveResources?resourceType=archetype&format=ADL&state1=INITIAL&state2=DRAFT&state3=TEAMREVIEW&state4=REVIEWSUSPENDED&state5=PUBLISHED&state6=REASSESS_DRAFT&state7=REASSESS_TEAMREVIEW&state8=REASSESS_REVIEWSUSPENDED'
+
+# TERMINOLOGY DICTIONARIES ***************************************************
+
+openEHR_external = {
+'240': 'signed',
+'648': 'witnessed',
+'250': 'amendment',
+'666': 'attestation',
+'249': 'creation',
+'523': 'deleted',
+'817': 'format conversion',
+'251': 'modification',
+'816': 'restoration',
+'252': 'synthesis',
+'253': 'unknown',
+'451': 'episodic',
+'433': 'event',
+'431': 'persistent',
+'815': 'report',
+'640': 'actual',
+'147': 'change',
+'521': 'decrease',
+'522': 'increase',
+'144': 'maximum',
+'146': 'mean',
+'268': 'median',
+'145': 'minimum',
+'267': 'mode',
+'148': 'total',
+'149': 'variation',
+'809': 'cancel',
+'810': 'resend',
+'811': 'send new',
+'807': 'generic EMR',
+'804': 'openEHR Demographic',
+'803': 'openEHR EHR',
+'806': 'openEHR generic',
+'805': 'openEHR synchronisation',
+'808': 'other',
+'812': 'any change',
+'813': 'correction',
+'814': 'update',
+'531': 'aborted',
+'245': 'active',
+'528': 'cancelled',
+'532': 'completed',
+'533': 'expired',
+'524': 'initial',
+'526': 'planned',
+'527': 'postponed',
+'529': 'scheduled',
+'530': 'suspended',
+'547': 'abort',
+'543': 'active step',
+'166': 'cancel',
+'541': 'do',
+'548': 'finish',
+'535': 'initiate',
+'550': 'notify aborted',
+'552': 'notify cancelled',
+'551': 'notify completed',
+'536': 'plan step',
+'537': 'postpone',
+'542': 'postponed step',
+'538': 'restore',
+'546': 'resume',
+'539': 'schedule',
+'534': 'scheduled step',
+'540': 'start',
+'544': 'suspend',
+'545': 'suspended step',
+'549': 'time out',
+'272': 'masked',
+'271': 'no information',
+'273': 'not applicable',
+'253': 'unknown',
+'253': 'unknown',
+'199': 'asynchronous audio-only; dictated; voice mail',
+'194': 'asynchronous audiovisual; recorded video',
+'206': 'asynchronous text; email; fax; letter; handwritten note; SMS message',
+'200': 'dictated',
+'207': 'email',
+'216': 'face-to-face communication',
+'208': 'facsimile/telefax',
+'211': 'handwritten note',
+'215': 'interactive written note',
+'213': 'internet chat',
+'205': 'internet telephone',
+'222': 'interpreted audio-only',
+'223': 'interpreted face-to-face communication',
+'224': 'interpreted video communication',
+'202': 'live audio-only; telephone; internet phone; teleconference',
+'195': 'live audiovisual; videoconference; videophone',
+'212': 'live text-only; internet chat; SMS chat; interactive written note',
+'193': 'not specified',
+'219': 'physically present',
+'220': 'physically remote',
+'210': 'printed/typed letter',
+'196': 'recorded video',
+'217': 'signing (face-to-face)',
+'218': 'signing over video',
+'214': 'SMS chat',
+'209': 'SMS message',
+'203': 'teleconference',
+'204': 'telephone',
+'221': 'translated text',
+'198': 'videoconferencing',
+'197': 'videophone',
+'201': 'voice-mail',
+'118': '<not set>',
+'339': 'Acceleration',
+'342': 'Acceleration, angular',
+'381': 'Amount (Eq)',
+'384': 'Amount (mole)',
+'497': 'Angle, plane',
+'500': 'Angle, solid',
+'755': 'Arbitrary',
+'335': 'Area',
+'119': 'Concentration',
+'350': 'Density',
+'362': 'Diffusion coefficient',
+'501': 'Electric capacitance',
+'498': 'Electric charge',
+'502': 'Electric conductance',
+'334': 'Electric current',
+'377': 'Electric field strength',
+'374': 'Electric potential',
+'655': 'Electric potential time',
+'121': 'Energy',
+'366': 'Energy density',
+'508': 'Energy dose',
+'365': 'Energy per area',
+'364': 'Energy, linear',
+'760': 'Enzyme activity',
+'347': 'Flow rate, mass',
+'352': 'Flow rate, mass/force',
+'351': 'Flow rate, mass/volume',
+'126': 'Flow rate, volume',
+'348': 'Flux, mass',
+'355': 'Force',
+'358': 'Force per mass',
+'357': 'Force, body',
+'382': 'Frequency',
+'586': 'Glomerular filtration rate',
+'373': 'Heat transfer coefficient',
+'505': 'Illuminance',
+'379': 'Inductance',
+'122': 'Length',
+'499': 'Light intensity',
+'123': 'Loudness',
+'504': 'Luminous flux',
+'378': 'Magnetic flux',
+'503': 'Magnetic flux density',
+'124': 'Mass',
+'385': 'Mass (IU)',
+'445': 'Mass (Units)',
+'349': 'Mass per area',
+'756': 'Medication dose rate',
+'344': 'Moment inertia, area',
+'345': 'Moment inertia, mass',
+'340': 'Momentum',
+'346': 'Momentum flow rate',
+'343': 'Momentum, angular',
+'759': 'Pace',
+'363': 'Power',
+'369': 'Power density',
+'368': 'Power flux',
+'367': 'Power, linear',
+'125': 'Pressure',
+'507': 'Proportion',
+'380': 'Qualified real',
+'506': 'Radioactivity',
+'754': 'Rate of change, frequency',
+'708': 'Rate of change, pressure',
+'685': 'Refractive power',
+'375': 'Resistance',
+'370': 'Specific energy',
+'371': 'Specific heat, gas constant',
+'337': 'Specific surface',
+'336': 'Specific volume',
+'354': 'Specific weight',
+'757': 'Spectral power',
+'758': 'Spectral power density',
+'356': 'Surface tension',
+'127': 'Temperature',
+'372': 'Thermal conductivity',
+'128': 'Time',
+'709': 'Time fraction',
+'359': 'Torque',
+'338': 'Velocity',
+'341': 'Velocity, angular',
+'360': 'Viscosity, dynamic',
+'361': 'Viscosity, kinematic',
+'129': 'Volume',
+'130': 'Work',
+'235': 'complementary health care',
+'236': 'dental care',
+'227': 'emergency care',
+'225': 'home',
+'802': 'mental healthcare',
+'231': 'midwifery care',
+'237': 'nursing home care',
+'238': 'other care',
+'230': 'primary allied health care',
+'228': 'primary medical care',
+'229': 'primary nursing care',
+'234': 'secondary allied health care',
+'232': 'secondary medical care',
+'233': 'secondary nursing care',
+'261': 'adopted daughter',
+'260': 'adopted son',
+'259': 'adoptive father',
+'258': 'adoptive mother',
+'256': 'biological father',
+'255': 'biological mother',
+'23': 'brother',
+'28': 'child',
+'265': 'cohabitee',
+'257': 'cousin',
+'29': 'daughter',
+'6': 'donor',
+'9': 'father',
+'3': 'foetus',
+'264': 'guardian',
+'39': 'maternal aunt',
+'8': 'maternal grandfather',
+'7': 'maternal grandmother',
+'38': 'maternal uncle',
+'10': 'mother',
+'189': 'neonate',
+'254': 'parent',
+'22': 'partner/spouse',
+'41': 'paternal aunt',
+'36': 'paternal grandfather',
+'37': 'paternal grandmother',
+'40': 'paternal uncle',
+'0': 'self',
+'27': 'sibling',
+'24': 'sister',
+'31': 'son',
+'263': 'step father',
+'262': 'step mother',
+'25': 'step or half brother',
+'26': 'step or half sister',
+'253': 'unknown',
+'669': 'public health',
+'670': 'reimbursement',
+'671': 'research study',
+'801': 'abandoned',
+'532': 'complete',
+'523': 'deleted',
+'800': 'inactive',
+'553': 'incomplete'
+}
+
 
 
 # FUNCTIONS ******************************************************************
@@ -233,18 +488,18 @@ import time
 import os
 
 def remove_folder_with_retries(folder, retries=5, delay=1):
-    for attempt in range(retries):
-        try:
-            shutil.rmtree(folder)
-            print(f"Deleted folder: {folder}")
-            return
-        except PermissionError as e:
-            print(f"Attempt {attempt+1}: PermissionError - {e}")
-            time.sleep(delay)
-        except FileNotFoundError:
-            print(f"Folder not found: {folder}")
-            return
-    print(f"Failed to delete folder after {retries} attempts.")
+	for attempt in range(retries):
+		try:
+			shutil.rmtree(folder)
+			print(f"Deleted folder: {folder}")
+			return
+		except PermissionError as e:
+			print(f"Attempt {attempt+1}: PermissionError - {e}")
+			time.sleep(delay)
+		except FileNotFoundError:
+			print(f"Folder not found: {folder}")
+			return
+	print(f"Failed to delete folder after {retries} attempts.")
 
 # Usage
 remove_folder_with_retries('temp')
@@ -536,6 +791,50 @@ def deleteEmptyLines(definition_text):
 		if line!='':
 			new_lines.append(lines[i])
 	return '\n'.join(new_lines)
+
+def replace_atcode_values(mydict,code,label):
+	if isinstance(mydict,dict):
+		for key in mydict.keys():
+
+			if isinstance(mydict[key],dict):
+
+				replace_atcode_values(mydict[key], code, label)
+			else:
+				if mydict[key] == code:
+					mydict[key] = mydict[key] + '||' + label
+	return mydict
+
+def replace_keys(obj, code, label, occurrence):
+	"""Recursively replace keys in a nested structure."""
+	pattern = f"[{code}]"
+	replacement = f"[{code}]||{label}"
+
+	if isinstance(obj, dict):
+		new_dict = {}
+		for k, v in obj.items():
+			#new_key = k.replace(pattern, replacement) if isinstance(k, str) else k
+			#if isinstance(k, str):
+			if isinstance(k, str) and k.find(pattern)>-1:
+				new_key = k.replace(pattern, replacement)
+				if occurrence != '':
+					new_key = occurrence + ' ' + new_key
+			else:
+				new_key = k
+			new_dict[new_key] = replace_keys(v, code, label, occurrence)
+
+			if isinstance(k, str) and k == code:
+				new_dict[k] = label
+
+
+		return new_dict
+
+	elif isinstance(obj, list):
+		return [replace_keys(item, code, label, occurrence) for item in obj]
+
+	else:
+		# leave other types (str, int, etc.) as they are
+		return obj
+
 
 def transform_definition_to_JSON(definition_text):
 	# VARIABLES ********************************************************************************
@@ -1046,7 +1345,70 @@ def parse_definition_for_elements(temp_JSON, element_list):
 						element_list.append((type,code))
 				else:
 					element_list.append((type,code))
+
+			#add the atcodes for defining codes (local ones...)
+			if 'defining_code' in temp_JSON[key].keys():
+				def_code = temp_JSON[key]['defining_code']
+				# strip the surrounding brackets
+				if def_code[0] == '[':
+					inner = def_code.strip()[1:-1]           # 'local:: at0001, at0002, at0003, at0004'
+				else:
+					inner = def_code
+				# remove the prefix and split by comma
+
+				inner = inner.replace('local::', '').strip()
+
+				temp_JSON[key]['defining_code'] = {}
+				if inner.find('openehr::')>-1:
+					inner = inner.replace('openehr::', '').strip()
+					def_code_list = [code.strip() for code in inner.split(',')]
+					for d in def_code_list:
+						if d in openEHR_external.keys():
+							temp_JSON[key]['defining_code'][d] = openEHR_external[d]
+						else:
+							temp_JSON[key]['defining_code'][d] = ''
+				else:
+					def_code_list = [code.strip() for code in inner.split(',')]
+					for d in def_code_list:
+						element_list.append(('defining_code',d))
+						temp_JSON[key]['defining_code'][d] = ''
+
+			#add the atcodes for properties (local ones...)
+			if 'property' in temp_JSON[key].keys():
+				def_code = temp_JSON[key]['property']
+				# strip the surrounding brackets
+				if def_code[0] == '[':
+					inner = def_code.strip()[1:-1]           # 'local:: at0001, at0002, at0003, at0004'
+				else:
+					inner = def_code
+				# remove the prefix and split by comma
+				inner = inner.replace('local::', '').strip()
+
+
+				temp_JSON[key]['property'] = {}
+				if inner.find('openehr::')>-1:
+					inner = inner.replace('openehr::', '').strip()
+					def_code_list = [code.strip() for code in inner.split(',')]
+					for d in def_code_list:
+						if d in openEHR_external.keys():
+							temp_JSON[key]['property'][d] = openEHR_external[d]
+						else:
+							temp_JSON[key]['property'][d] = ''
+				else:
+					def_code_list = [code.strip() for code in inner.split(',')]
+					for d in def_code_list:
+						element_list.append(('property',d))
+						temp_JSON[key]['property'][d] = ''
+
 			parse_definition_for_elements(temp_JSON[key],element_list)
+		if isinstance(temp_JSON[key],str):
+			if temp_JSON[key].find('::at')>-1:
+				code_index =  temp_JSON[key].find('::at')
+				code =  temp_JSON[key][code_index+2:-1]
+				type = temp_JSON[key][1:code_index]
+				temp_JSON[key] = code
+
+				element_list.append((type,code))
 	return element_list
 
 def parse_definition_for_inclusions(temp_JSON, inclusion_list, includeorexclude):
@@ -1133,28 +1495,27 @@ def dict_to_html(d, indent=0):
 	return html
 
 def dict_to_collapsible_html(d):
-    html = ""
-    if isinstance(d, dict):
-        for key, value in d.items():
-            if isinstance(value, (dict, list)):
-                html += f"<details><summary>{key}</summary>{dict_to_collapsible_html(value)}</details>\n"
-            else:
-                html += f"<div><span class='dict-key'>{key}</span>: <span class='dict-value'>{value}</span></div>\n"
-    elif isinstance(d, list):
-        html += "<ul>"
-        for item in d:
-            html += "<li>" + dict_to_collapsible_html(item) + "</li>"
-        html += "</ul>"
-    else:
-        html += f"<span class='dict-value'>{d}</span>"
-    return html
+	html = ""
+	if isinstance(d, dict):
+		for key, value in d.items():
+			if isinstance(value, (dict, list)):
+				html += f"<details><summary>{key}</summary>{dict_to_collapsible_html(value)}</details>\n"
+			else:
+				html += f"<div><span class='dict-key'>{key}</span>: <span class='dict-value'>{value}</span></div>\n"
+	elif isinstance(d, list):
+		html += "<ul>"
+		for item in d:
+			html += "<li>" + dict_to_collapsible_html(item) + "</li>"
+		html += "</ul>"
+	else:
+		html += f"<span class='dict-value'>{d}</span>"
+	return html
 
 def convert_and_parse_definition_section(definition_section):
 	definition_text = '\n'.join(definition_section)
 	definition_JSON = transform_definition_to_JSON(definition_text)
 	#structure_html = dict_to_html(definition_JSON)
 	structure_html = dict_to_collapsible_html(definition_JSON)
-
 
 	element_list = []
 	element_list = parse_definition_for_elements(definition_JSON, element_list)
@@ -1164,13 +1525,35 @@ def convert_and_parse_definition_section(definition_section):
 	exclusion_list = parse_definition_for_inclusions(definition_JSON, exclusion_list, 'exclude')
 	occurr_dic = get_occurrences_from_definition(definition_text)
 
-	#print(definition_JSON)
-	#input()
+	#expand inclusion an dexclusion rules for the JSON structure visualization
+	def parse_for_rules(my_dict):
+		for key in my_dict.keys():
+			if key == 'include' or key == 'exclude':
+				if 'archetype_id/value' in my_dict[key].keys():
+					rule_list = [rule.strip() for rule in my_dict[key]['archetype_id/value'].split('|')]
+					my_dict[key]['archetype_id/value']={}
+					for r in range(len(rule_list)):
+						my_dict[key]['archetype_id/value'][str(r)]=rule_list[r]
+			else:
+				if isinstance(my_dict[key], dict):
+					parse_for_rules(my_dict[key])
 
-	#print(element_list)
-	#input()
 
-	return element_list, inclusion_list, exclusion_list, occurr_dic, structure_html
+	structure_json = definition_JSON
+	parse_for_rules(structure_json)
+
+	#make element list unique (so there are no repetitions of at-codes
+	temp_element_list = []
+	temp_code_list = []
+	for element in element_list:
+		type = element[0]
+		code = element[1]
+		if code not in temp_code_list:
+			temp_code_list.append(code)
+			temp_element_list.append((type, code))
+	element_list = temp_element_list
+
+	return element_list, inclusion_list, exclusion_list, occurr_dic, structure_html, structure_json
 
 def get_archetypes_from_pattern(pattern, archetypeIdList):
 	outputList = []
@@ -1297,7 +1680,7 @@ def transformWorkflow(zipFileName):
 		# definition_section has to be parsed separately
 		print('Creating definition JSON')
 		#inclusions, exclusions, elements = parse_inclusion_exclusion_elements(definition_section, archetypeIdList)
-		element_list, inclusion_list, exclusion_list, occurr_dic, structure_html = convert_and_parse_definition_section(definition_section)
+		element_list, inclusion_list, exclusion_list, occurr_dic, structure_html, structure_json = convert_and_parse_definition_section(definition_section)
 
 		print('Creating node...')
 		node = {}
@@ -1397,8 +1780,6 @@ def transformWorkflow(zipFileName):
 				node['purpose'] = ''
 			# use
 			if 'use' in description_JSON['details'][current_language].keys():
-				#print(description_JSON['details'][current_language]['use'])
-				#input()
 				node['use'] = str(description_JSON['details'][current_language]['use'])
 			else:
 				node['use'] = ''
@@ -1480,9 +1861,18 @@ def transformWorkflow(zipFileName):
 			current_language = node['original_language']
 		for element in element_list:
 			datatype = element[0]
+			datatype = datatype.replace('C_DV_QUANTITY', 'DV_QUANTITY')
 			code = element[1]
-			label = ontology_JSON['term_definitions'][current_language]['items'][element[1]]['text']
-			description = ontology_JSON['term_definitions'][current_language]['items'][element[1]]['description']
+			#is the code in the term_definitions or in constraint_definitions?
+			label = ''
+			description = ''
+			if code in ontology_JSON['term_definitions'][current_language]['items'].keys():
+				label = ontology_JSON['term_definitions'][current_language]['items'][element[1]]['text']
+				description = ontology_JSON['term_definitions'][current_language]['items'][element[1]]['description']
+			if 'constraint_definitions' in ontology_JSON.keys():
+				if code in ontology_JSON['constraint_definitions'][current_language]['items'].keys():
+					label = ontology_JSON['constraint_definitions'][current_language]['items'][element[1]]['text']
+					description = ontology_JSON['constraint_definitions'][current_language]['items'][element[1]]['description']
 			if isinstance(label,list):
 				label = str(label).replace(']','').replace('[','')
 			if isinstance(description,list):
@@ -1499,12 +1889,34 @@ def transformWorkflow(zipFileName):
 		for item in node['items']:
 			if item['occurrence']!='':
 				structure_html = structure_html.replace('['+item['code']+']','['+item['code']+'] '+'<span class="dict-label">'+item['label']+'</span> '+'<span class="dict-occurrences">'+item['occurrence']+'</span>')
+
 			else:
 				structure_html = structure_html.replace('['+item['code']+']','['+item['code']+'] '+'<span class="dict-label">'+item['label']+'</span>')
 		while structure_html.find('  ')>-1:
 			structure_html = structure_html.replace('  ',' ')
 		structure_html = structure_html.replace('\n','')
 		node['structure'] = structure_html
+
+
+
+
+
+		#structure_json = str(structure_json).replace('['+item['code']+']','['+item['code']+'] '+'||'+item['label'])
+		for item in node['items']:
+			structure_json = replace_keys(
+				structure_json,
+				code=item['code'],
+				label=item['label'],
+				occurrence = item['occurrence']
+			)
+			structure_json = replace_atcode_values(
+				structure_json,
+				code=item['code'],
+				label=item['label']
+			)
+
+
+		node['structure_json'] = structure_json
 
 		#parent archetype
 		node['parent']=''
