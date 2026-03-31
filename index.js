@@ -1,5 +1,5 @@
 //INITIATE CONSTANTS and GLOBAL VARIABLES *****************************************************************************************
-const version = '0.77.0-beta';
+const version = '0.78.2-beta';
 
 let newNodes = []
 
@@ -2897,6 +2897,57 @@ function resetZoom() {
   }
 }
 
+function zoomToPos(x, y, scale = 0.7, duration = 100) {
+  const svg = d3.select('svg');
+
+  const t = d3.zoomIdentity
+    .scale(scale)
+    .translate(-x+visualization_element.offsetWidth / (2 * scale), -y+visualization_element.offsetHeight / (2 * scale));  // translate first…
+       // …then scale
+
+  svg
+    .transition()
+    .duration(duration)
+    .call(myZoom.transform, t);
+}
+
+function goToPos_old(x, y, duration = 1500) {
+  const svg = d3.select('svg');
+
+
+  const t = d3.zoomIdentity
+    .translate(-x+visualization_element.offsetWidth / (2), -y+visualization_element.offsetHeight / (2));  // translate first…
+       // …then scale
+
+  svg
+    .transition()
+    .duration(duration)
+    .call(myZoom.transform, t);
+}
+
+function goToPos(x, y, duration = 2000) {
+  const svg = d3.select('svg');
+
+  // Get the current zoom transform
+  const currentTransform = d3.zoomTransform(svg.node());
+  const k = currentTransform.k;       // keep current scale
+
+  // Compute the new translate so that (x, y) is centered
+  const cx = visualization_element.offsetWidth  / 2;
+  const cy = visualization_element.offsetHeight / 2;
+
+  const t = d3.zoomIdentity
+    .translate(cx, cy)        // move origin to center of viewport
+    .scale(k)                 // keep existing zoom level
+    .translate(-x, -y);       // move node to origin
+  
+  myZoom.interpolate(d3.interpolate);   // linear interpolation of the transform
+
+  svg
+    .transition()
+    .duration(duration)
+    .call(myZoom.transform, t);
+}
 
 function redraw() {
   d3.selectAll("svg g > *").remove(); //remove everything from the svg
@@ -3668,6 +3719,40 @@ function focusNode(nodeId) {
 
     } // END OF CREATE PROJECT VIEW
 
+
+    if (sel_view === 'ECOSYSTEM') {
+      let scale = 2.25;
+      nodes = [];
+
+      //THE NODE CREATEION SHOULD BE DONE DIRECTLY FROM THE allNodes VARIABLE... 
+      allNodes.forEach(en => {
+          tempNode = en;
+          tempNode.color = 'skyblue';//en.color;
+          tempNode.size = 10;//en.size;
+          tempNode.stroke = "transparent";//en.stroke;
+          tempNode.fx = en.posx*scale;
+          tempNode.fy = en.posy*scale;
+          nodes.push(tempNode);
+      })
+
+      links = ecolinks;
+      links.forEach(l => {
+        if (l.target.id==nodeId || l.source.id==nodeId){
+          l.color='red';
+        }
+        else{
+          l.color='gainsboro';
+        }
+      })     
+      //nodes.forEach(n => {n.color='skyblue';})
+      selected = nodes.find(n => n.id === nodeId);
+      selected.color = 'red';
+      selected.size = 75;
+
+      //zoomToPos(selected.fx, selected.fy);
+      goToPos(selected.fx, selected.fy)
+      
+    }
 
     // CREATE TEMPLATE PLANNER VIEW
     if (sel_view === 'TREEPLANNER') {
