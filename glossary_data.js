@@ -1,4 +1,4 @@
-const glossary_extraction_date = "2026-07-01 08:06:56";
+const glossary_extraction_date = "2026-07-06 08:34:46";
 
 const glossary_extraction_source = ['https://specifications.openehr.org/releases/BASE/latest/base_types.html', 'https://specifications.openehr.org/releases/RM/latest/common.html', 'https://specifications.openehr.org/releases/RM/latest/data_structures.html', 'https://specifications.openehr.org/releases/RM/latest/data_types.html', 'https://specifications.openehr.org/releases/RM/latest/demographic.html', 'https://specifications.openehr.org/releases/RM/latest/ehr_extract.html', 'https://specifications.openehr.org/releases/RM/latest/ehr.html', 'https://specifications.openehr.org/releases/RM/latest/integration.html', 'https://specifications.openehr.org/releases/RM/latest/support.html', 'https://specifications.openehr.org/releases/BASE/latest/foundation_types.html', 'https://specifications.openehr.org/releases/BASE/latest/resource.html'];
 
@@ -2017,6 +2017,23 @@ const glossary_data = {
                     "Real"
                 ]
             },
+            "normal_range": {
+                "description": "Optional normal range.",
+                "existence": "0..1",
+                "type": [
+                    "DV_INTERVAL",
+                    "DV_QUANTITY"
+                ]
+            },
+            "other_reference_ranges": {
+                "description": "Optional tagged other reference ranges for this value in its particular measurement context.",
+                "existence": "0..1",
+                "type": [
+                    "List",
+                    "REFERENCE_RANGE",
+                    "DV_QUANTITY"
+                ]
+            },
             "precision": {
                 "description": "Precision to which the value of the quantity is expressed, in terms of number of decimal places. The value 0 implies an integral quantity.\nThe value -1 implies no limit, i.e. any number of decimal places.",
                 "existence": "0..1",
@@ -2497,6 +2514,36 @@ const glossary_data = {
     },
     "EHR": {
         "attributes": {
+            "compositions": {
+                "description": "Master list of all Versioned Composition references in this EHR.",
+                "existence": "0..1",
+                "type": [
+                    "List",
+                    "OBJECT_REF"
+                ]
+            },
+            "contributions": {
+                "description": "List of contributions causing changes to this EHR. Each contribution contains a list of versions, which may include references to any number of VERSION instances, i.e. items of type VERSIONED_COMPOSITION and VERSIONED_FOLDER.",
+                "existence": "0..1",
+                "type": [
+                    "List",
+                    "OBJECT_REF"
+                ]
+            },
+            "directory": {
+                "description": "Optional directory structure for this EHR. If present, this is a reference to the first member of folders.",
+                "existence": "0..1",
+                "type": [
+                    "OBJECT_REF"
+                ]
+            },
+            "ehr_access": {
+                "description": "Reference to EHR_ACCESS object for this EHR.",
+                "existence": "1..1",
+                "type": [
+                    "OBJECT_REF"
+                ]
+            },
             "ehr_id": {
                 "description": "The unique identifier of this EHR.\n\n\n\n\n\nNote\n\n\nis is strongly recommended that a UUID always be used for this field.",
                 "existence": "1..1",
@@ -2504,11 +2551,33 @@ const glossary_data = {
                     "HIER_OBJECT_ID"
                 ]
             },
+            "ehr_status": {
+                "description": "Reference to EHR_STATUS object for this EHR.",
+                "existence": "1..1",
+                "type": [
+                    "OBJECT_REF"
+                ]
+            },
+            "folders": {
+                "description": "Optional additional Folder structures for this EHR. If set, the directory attribute refers to the first member.",
+                "existence": "0..1",
+                "type": [
+                    "List",
+                    "OBJECT_REF"
+                ]
+            },
             "system_id": {
                 "description": "The identifier of the logical EHR management system in which this EHR was created.",
                 "existence": "1..1",
                 "type": [
                     "HIER_OBJECT_ID"
+                ]
+            },
+            "time_created": {
+                "description": "Time of creation of the EHR.",
+                "existence": "1..1",
+                "type": [
+                    "DV_DATE_TIME"
                 ]
             }
         },
