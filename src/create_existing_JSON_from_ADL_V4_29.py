@@ -14,12 +14,12 @@ import networkx as nx
 
 # VARIABLES ******************************************************************
 # general things
-version = 'v4.30'
+version = 'v4.29'
 author = 'Martin A. Koch, PhD'
 copyright = '(c) 2026, CatSalut. Servei Català de la Salut'
 license = 'License: Apache 2.0'
 # Set headless to True if you do not need the GUI (or False if you want to use the GUI
-headless = True
+headless = False
 # Variables for running script headless (without GUI)
 URL = 'https://ckm.openehr.org/ckm/retrieveResources?resourceType=archetype&format=ADL&state1=INITIAL&state2=DRAFT&state3=TEAMREVIEW&state4=REVIEWSUSPENDED&state5=PUBLISHED&state6=REASSESS_DRAFT&state7=REASSESS_TEAMREVIEW&state8=REASSESS_REVIEWSUSPENDED'
 zipFileName = 'TempZipFile.zip'
@@ -1636,179 +1636,6 @@ def count_matches(a, b):
 	return sum
 
 # THE BIG MAIN FUNCTION THAT CONTROLS THE TRANSFORMATION WORKFLOW
-import re
-import ast
-
-
-def resolve_datatype_OLD2(datatype):
-	if isinstance(datatype, list):
-		print('this is a list', datatype)
-	if not isinstance(datatype, str):
-		return datatype
-
-	stripped = datatype.strip()
-	if not (stripped.startswith("[") and stripped.endswith("]")):
-		return datatype
-
-	try:
-		items = ast.literal_eval(stripped)
-		print(items)
-	except (ValueError, SyntaxError):
-		return datatype
-
-	if not isinstance(items, list):
-		return datatype
-
-	def try_parse_numeric(val):
-		"""Returns ('int', int_val), ('float', float_val), or None."""
-		try:
-			int_val = int(val)
-			return ('int', int_val)
-		except (ValueError, TypeError):
-			pass
-		try:
-			f = float(val)
-			if f == int(f):  # e.g. 1.0, 2.0 — whole number floats
-				return ('float', int(f))
-		except (ValueError, TypeError):
-			pass
-		return None
-
-	result = []
-	i = 0
-	while i < len(items):
-		# Try to collect a run of same-type numeric strings starting at i
-		run_values = []
-		run_type = None
-		j = i
-		while j < len(items):
-			parsed = try_parse_numeric(items[j])
-			if parsed is None:
-				break
-			kind, num = parsed
-			if run_type is None:
-				run_type = kind
-			elif run_type != kind:
-				break  # mixed int/float — stop the run
-			run_values.append(num)
-			j += 1
-
-		if len(run_values) >= 2:
-			run_sorted = sorted(run_values)
-			if run_sorted == list(range(run_sorted[0], run_sorted[0] + len(run_sorted))):
-				label = "DV_ORDINAL" if run_type == 'int' else "DV_SCALE"
-				result.append(label)
-				i = j
-				continue
-
-		result.append(items[i])
-		i += 1
-
-	if result == items:
-		return datatype
-
-	return str(result)
-
-def resolve_datatype(datatype):
-	#separate strings, floats and integers
-	S = []
-	F = []
-	I = []
-
-	if not isinstance(datatype, str):
-		return datatype
-
-	stripped = datatype.strip()
-	if not (stripped.startswith("[") and stripped.endswith("]")):
-		return datatype
-
-	try:
-		mixed_list = ast.literal_eval(stripped)
-	except (ValueError, SyntaxError):
-		return datatype
-
-	if not isinstance(mixed_list, list):
-		return datatype
-
-	for item in mixed_list:
-		try:
-			int_val = int(item)
-			I.append(int_val)
-		except ValueError:
-			try:
-				float_val = float(item)
-				F.append(float_val)
-			except ValueError:
-				S.append(item)
-	if len(I)>0:
-		S.append('DV_ORDINAL')
-	if len(F)>0:
-		S.append('DV_SCALE')
-	S = list(set(S))
-	return str(S)
-
-
-def OLDresolve_datatype(datatype):
-	datatype = str(datatype)
-	print('Input',datatype)
-
-	if not isinstance(datatype, str):
-		return datatype
-
-	# Check if it looks like a list string
-	stripped = datatype.strip()
-	print('Stripped',stripped)
-
-
-	if not (stripped.startswith("[") and stripped.endswith("]")):
-		return datatype
-
-	# Parse the string into an actual list
-	try:
-		items = ast.literal_eval(stripped)
-		print('Items', items)
-
-	except (ValueError, SyntaxError):
-		return datatype
-
-	if not isinstance(items, list):
-		return datatype
-
-	# Process the list, collapsing consecutive number runs into "DV_ORDINAL"
-	result = []
-	i = 0
-	while i < len(items):
-		# Try to collect a run of consecutive numeric strings starting at i
-		run = []
-		j = i
-		while j < len(items):
-			try:
-				run.append(int(items[j]))
-				j += 1
-			except (ValueError, TypeError):
-				break
-
-		if len(run) >= 2:
-			print('run bigger than 2')
-			# Check if the run is consecutive
-			run_sorted = sorted(run)
-			print(list(range(run_sorted[0], run_sorted[0] + len(run_sorted))))
-			if run_sorted == list(range(run_sorted[0], run_sorted[0] + len(run_sorted))):
-				result.append("DV_ORDINAL")
-				i = j
-				continue
-
-		# Not a consecutive run — emit the current item as-is
-		result.append(items[i])
-		i += 1
-
-	# If nothing changed, return original
-	if result == items:
-		return datatype
-
-	# Rebuild as a string in the same format
-	return str(result)
-
 def transformWorkflow(zipFileName):
 	global archetypeIdList
 	now = datetime.datetime.now()
@@ -2036,9 +1863,6 @@ def transformWorkflow(zipFileName):
 		for element in element_list:
 			datatype = element[0]
 			datatype = datatype.replace('C_DV_QUANTITY', 'DV_QUANTITY')
-
-			datatype = resolve_datatype(datatype)
-
 			code = element[1]
 			#is the code in the term_definitions or in constraint_definitions?
 			label = ''
@@ -2058,9 +1882,6 @@ def transformWorkflow(zipFileName):
 			occurrence = ''
 			if code in occurr_dic.keys():
 				occurrence = occurr_dic[code]
-
-
-
 			element_dict = {'code': code, 'label':label, 'type': datatype, 'description' : description, 'occurrence': occurrence}
 			node['items'].append(element_dict)
 
@@ -2288,8 +2109,6 @@ def transformWorkflow(zipFileName):
 	for node in existing_archetypes:
 		node['posx'] = pos[node['id']][0]
 		node['posy'] = pos[node['id']][1]
-
-
 
 	print('create liks of ecosystem')
 	eco_links = []
